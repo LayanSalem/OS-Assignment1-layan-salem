@@ -34,6 +34,10 @@ class Process implements Runnable {
     // Feature 1: Priority attribute for process (1 to 10)
     private int priority;
 
+    private long arrivalTime;
+private long finishTime;
+private long waitingTime;
+private long turnaroundTime; 
     // Constructor to initialize the process with name, burst time, and time quantum
     public Process(String name, int burstTime, int timeQuantum) {
         this.name = name;
@@ -43,13 +47,27 @@ class Process implements Runnable {
 
         // Feature 1: Generate random priority between 1 (lowest) and 10 (highest)
         this.priority = (int) (Math.random() * 10) + 1;
+
+        this.arrivalTime = System.currentTimeMillis();
     }
 
     // Feature 1: Getter method for priority
     public int getPriority() {
         return priority;
     }
+public void calculateTimes() {
+        this.finishTime = System.currentTimeMillis();
+        this.turnaroundTime = this.finishTime - this.arrivalTime;
+        this.waitingTime = Math.max(0, this.turnaroundTime - this.burstTime);
+    }
 
+    public long getWaitingTime() {
+        return waitingTime;
+    }
+
+    public long getTurnaroundTime() {
+        return turnaroundTime;
+    }
     // This method will be called when the thread for this process is started
     @Override
     public void run() {
@@ -159,6 +177,7 @@ class Process implements Runnable {
 public class SchedulerSimulation {
     // Feature 2: Static counter to track total context switches
     public static int contextSwitchCount = 0;
+
     public static void main(String[] args) {
         // Student ID set to your ID
         int studentID = 446052671;
@@ -176,7 +195,8 @@ public class SchedulerSimulation {
 
         // Map to associate each thread with its process object
         Map<Thread, Process> processMap = new HashMap<>();
-
+// list to save finished processes for final table
+java.util.List<Process> finishedProcesses = new java.util.ArrayList<>();
         // Print simulation header
         System.out.println("\n" + Colors.BOLD + Colors.BRIGHT_CYAN +
                 "╔═══════════════════════════════════════════════════════════════════════════════════════╗" +
@@ -246,11 +266,12 @@ public class SchedulerSimulation {
             System.out.println(Colors.BRIGHT_WHITE + "]" + Colors.RESET);
             System.out.println(Colors.BOLD + Colors.MAGENTA + "└" + "─".repeat(79) + Colors.RESET + "\n");
 
-            // Feature 2: Increment context switch counter each time a process starts running
+            // Feature 2: Increment context switch counter each time a process starts
+            // running
             contextSwitchCount++;
 
             currentThread.start();
-             
+
             try {
                 currentThread.join();
             } catch (InterruptedException e) {
@@ -267,8 +288,15 @@ public class SchedulerSimulation {
                             Colors.RESET + Colors.YELLOW + " is the last process → running to completion" +
                             Colors.RESET);
                     process.runToCompletion();
+                    process.calculateTimes();
+                    finishedProcesses.add(process);
                 }
+            }else {
+                // calculate times and add to finished list
+                process.calculateTimes();
+                finishedProcesses.add(process);
             }
+
         }
 
         // End simulation
@@ -282,9 +310,17 @@ public class SchedulerSimulation {
         System.out.println(Colors.BOLD + Colors.BRIGHT_GREEN +
                 "╚════════════════════════════════════════════════════════════════════════════════╝" +
                 Colors.RESET + "\n");
-// Feature 2: Print total context switches count
-        System.out.println(Colors.BOLD + Colors.CYAN + " 🔄 Total Context Switches: " + Colors.BRIGHT_YELLOW + contextSwitchCount + Colors.RESET + "\n");
-
+        // Feature 2: Print total context switches count
+        System.out.println(Colors.BOLD + Colors.CYAN + " 🔄 Total Context Switches: " + Colors.BRIGHT_YELLOW
+                + contextSwitchCount + Colors.RESET + "\n");
+// print final summary table
+System.out.println("\n------------------------------------------------------------------------");
+System.out.println("Process Name\tBurst Time(ms)\tWaiting Time(ms)\tTurnaround Time(ms)");
+System.out.println("------------------------------------------------------------------------");
+for (Process p : finishedProcesses) {
+    System.out.println(p.getName() + "\t\t" + p.getBurstTime() + "\t\t" + p.getWaitingTime() + "\t\t\t" + p.getTurnaroundTime());
+}
+System.out.println("------------------------------------------------------------------------\n");
     }
 
     // Method to add process to queue
