@@ -35,9 +35,10 @@ class Process implements Runnable {
     private int priority;
 
     private long arrivalTime;
-private long finishTime;
-private long waitingTime;
-private long turnaroundTime; 
+    private long finishTime;
+    private long waitingTime;
+    private long turnaroundTime;
+
     // Constructor to initialize the process with name, burst time, and time quantum
     public Process(String name, int burstTime, int timeQuantum) {
         this.name = name;
@@ -55,7 +56,8 @@ private long turnaroundTime;
     public int getPriority() {
         return priority;
     }
-public void calculateTimes() {
+
+    public void calculateTimes() {
         this.finishTime = System.currentTimeMillis();
         this.turnaroundTime = this.finishTime - this.arrivalTime;
         this.waitingTime = Math.max(0, this.turnaroundTime - this.burstTime);
@@ -68,6 +70,7 @@ public void calculateTimes() {
     public long getTurnaroundTime() {
         return turnaroundTime;
     }
+
     // This method will be called when the thread for this process is started
     @Override
     public void run() {
@@ -195,8 +198,8 @@ public class SchedulerSimulation {
 
         // Map to associate each thread with its process object
         Map<Thread, Process> processMap = new HashMap<>();
-// list to save finished processes for final table
-java.util.List<Process> finishedProcesses = new java.util.ArrayList<>();
+        // list to save finished processes for final table
+        java.util.List<Process> finishedProcesses = new java.util.ArrayList<>();
         // Print simulation header
         System.out.println("\n" + Colors.BOLD + Colors.BRIGHT_CYAN +
                 "╔═══════════════════════════════════════════════════════════════════════════════════════╗" +
@@ -291,7 +294,7 @@ java.util.List<Process> finishedProcesses = new java.util.ArrayList<>();
                     process.calculateTimes();
                     finishedProcesses.add(process);
                 }
-            }else {
+            } else {
                 // calculate times and add to finished list
                 process.calculateTimes();
                 finishedProcesses.add(process);
@@ -313,14 +316,15 @@ java.util.List<Process> finishedProcesses = new java.util.ArrayList<>();
         // Feature 2: Print total context switches count
         System.out.println(Colors.BOLD + Colors.CYAN + " 🔄 Total Context Switches: " + Colors.BRIGHT_YELLOW
                 + contextSwitchCount + Colors.RESET + "\n");
-// print final summary table
-System.out.println("\n------------------------------------------------------------------------");
-System.out.println("Process Name\tBurst Time(ms)\tWaiting Time(ms)\tTurnaround Time(ms)");
-System.out.println("------------------------------------------------------------------------");
-for (Process p : finishedProcesses) {
-    System.out.println(p.getName() + "\t\t" + p.getBurstTime() + "\t\t" + p.getWaitingTime() + "\t\t\t" + p.getTurnaroundTime());
-}
-System.out.println("------------------------------------------------------------------------\n");
+        // print final summary table
+        System.out.println("\n------------------------------------------------------------------------");
+        System.out.println("Process Name\tBurst Time(ms)\tWaiting Time(ms)\tTurnaround Time(ms)");
+        System.out.println("------------------------------------------------------------------------");
+        for (Process p : finishedProcesses) {
+            System.out.println(p.getName() + "\t\t" + p.getBurstTime() + "\t\t" + p.getWaitingTime() + "\t\t\t"
+                    + p.getTurnaroundTime());
+        }
+        System.out.println("------------------------------------------------------------------------\n");
     }
 
     // Method to add process to queue
