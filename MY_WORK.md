@@ -39,7 +39,7 @@
 
 ## 🎥 Video Link
 
-**Video Link**: [Paste your video link here]
+**Video Link**: https://drive.google.com/file/d/1BYts8mBkaJhGZkQLrezP3l8YWF5q9yVe/view?usp=drive_link
 
 > ⚠️ **WARNING:** The video must be **publicly accessible** ("Anyone with the link can view") on **Google Drive**, **YouTube (Unlisted or Public)** or any other cloud file-sharing system. A private, restricted or broken link counts as a **missing video (-1 mark)**.
 >
@@ -316,7 +316,7 @@ Example from my output:
 
 **Your Answer:** *(3-5 sentences per example)*
 
-### Example 1 (operating-system level): [Name of scenario]
+### Example 1 (operating-system level): Operating System Task Manager
 
 **Description**:
 [In daily desktop operating systems, the CPU uses Round-Robin time slicing to run several apps at once, such as Google Chrome, Word, and Spotify. The OS assigns a tiny time slice to each app's thread, runs it briefly, and then switches to the next one so everything appears to run at the same time.]
@@ -324,7 +324,7 @@ Example from my output:
 **Why Round-Robin works well here**:
 [Round-Robin keeps the system smooth and responsive so the screen doesn't freeze. In this example, the open programs act as the "processes", the millisecond execution window given by the OS acts as the "time quantum", and swapping between running tasks acts as the "context switch". This makes sure heavy background tasks don't block basic user inputs like moving the mouse or typing.]
 
-### Example 2: [Name of application/scenario]
+### Example 2: Web Server Request Handling
 
 **Description**:
 [When thousands of users visit a website at the same time, the web server uses threads to handle incoming requests. Instead of making users wait for long database queries to finish one by one, the server uses Round-Robin scheduling to give each user request a small turn of processing time.]
